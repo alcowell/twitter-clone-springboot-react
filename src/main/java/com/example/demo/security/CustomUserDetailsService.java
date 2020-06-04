@@ -19,7 +19,7 @@ import com.example.demo.repository.UserRepository;
  * <p>
  *
  * @author yosuk
- * @see		UserRepository
+ * @see	UserRepository
  */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -29,9 +29,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	/**
 	 * Let users login with either username or userId
-	 * @param 	usernameOrUserId			The string represents user's name or id.
-	 * @throws 	UsernameNotFoundException	Exception thrown when the UserDetailsService implementation cannot find a User by username.
-	 * @return 	UserPrincipal 				The class store the information object to perform authentication and authorization.
+	 * @param usernameOrUserId　The string represents user's name or id.
+	 * @throws UsernameNotFoundException　Exception thrown when the UserDetailsService implementation cannot find a User by username.
+	 * @return UserPrincipal　The class store the information object to perform authentication and authorization.
 	 */
 	@Override
 	@Transactional
@@ -46,7 +46,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	/**
 	 * This method is used by JWTAuthenticationFilter
 	 * @param id
-	 * @return UserPrincipal	The class store the information object to perform authentication and authorization.
+	 * @return UserPrincipal　The class store the information object to perform authentication and authorization.
 	 */
 	@Transactional
 	public UserDetails loadUserById(Long id) {
