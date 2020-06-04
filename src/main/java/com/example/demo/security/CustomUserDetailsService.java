@@ -11,15 +11,14 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 /**
+ * This class calls the repository with the user's Id and name as arguments.
  * This class is custom <tt>UserDetailService</tt> for user authentication.
- * This class call <tt>UserRepository</tt> with the user information as an argument.
  *
  * <p>The methods of this class all throws a <tt>UsernameNotFoundException</tt>
  * if an unprivileged user trys to login.
- * <p>
  *
  * @author yosuk
- * @see		UserRepository
+ * @see UserRepository
  */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -29,9 +28,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	/**
 	 * Let users login with either username or userId
-	 * @param 	usernameOrUserId			The string represents user's name or id.
-	 * @throws 	UsernameNotFoundException	Exception thrown when the UserDetailsService implementation cannot find a User by username.
-	 * @return 	UserPrincipal 				The class store the information object to perform authentication and authorization.
+	 * @param usernameOrUserId The string represents user's name or id.
+	 * @throws UsernameNotFoundException Exception thrown when the UserDetailsService
+	 *                                    implementation cannot find a User by username.
+	 * @return UserPrincipal The class store the information object to perform
+	 *                        authentication and authorization.
 	 */
 	@Override
 	@Transactional
@@ -44,9 +45,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 	}
 
 	/**
-	 * This method is used by JWTAuthenticationFilter
+	 * Find user information
 	 * @param id
-	 * @return UserPrincipal	The class store the information object to perform authentication and authorization.
+	 * @return UserPrincipal The class store the information object to perform authentication and authorization.
 	 */
 	@Transactional
 	public UserDetails loadUserById(Long id) {
