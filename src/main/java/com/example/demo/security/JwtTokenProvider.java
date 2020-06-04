@@ -18,7 +18,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 
 /**
  * This class generate and verifying JWT after a user logs in successfully.
- * And this validates the JWT sent in the Authorization header of the requests.
+ * And validated Jwt token sent in the Authorization header of the requests.
  *
  * @author yosuk
  *
@@ -47,8 +47,8 @@ public class JwtTokenProvider {
 	 * This method generate Jwt token based on authenticated user information,
 	 * current time and secret key.
 	 *
-	 * @param 	authentication 	An authenticated principal once the request has been processed.
-	 * @return 	JwtsToken		Jwt token consists of three elements: headers, body and signature.
+	 * @param authentication An authenticated principal once the request has been processed.
+	 * @return JwtsToken Jwt token consists of three elements: headers, body and signature.
 	 */
 	public String generateToken(Authentication authentication) {
 		//
@@ -73,6 +73,11 @@ public class JwtTokenProvider {
 				.compact();
 	}
 
+	/**
+	 * Get user's Id from Jwt token.
+	 * @param token
+	 * @return userId
+	 */
 	public Long getUserIdFromJwt(String token) {
 		Claims claims = Jwts.parser()
 				.setSigningKey(jwtSecret)
@@ -85,8 +90,9 @@ public class JwtTokenProvider {
 	 * This method validates Jwt tokens. If it is invalid, this method outputs errors
 	 * corresponding to the causes.
 	 *
-	 * @param 	authToken 	Jwt tokens send by users.
-	 * @return	true/false 	The result of validating Jwt tokens send by users. Return true if it is valid.
+	 * @param authToken Jwt tokens send by users.
+	 * @return true/false The result of validating Jwt tokens send by users.
+	 *                     Return true if it is valid.
 	 */
 	public boolean validateToken(String authToken) {
 		try {

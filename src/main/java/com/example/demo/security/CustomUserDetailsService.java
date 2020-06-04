@@ -45,9 +45,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 	}
 
 	/**
-	 * Find user information
-	 * @param id
-	 * @return UserPrincipal The class store the information object to perform authentication and authorization.
+	 * Find user information based on user's id taken from Jwt token.
+	 * @param id The long number taken from Jwt token by <tt>JwtAuthenticationFilter</tt>.
+	 * @return UserPrincipal The class store the information object to perform authentication
+	 *                        and authorization.
 	 */
 	@Transactional
 	public UserDetails loadUserById(Long id) {
