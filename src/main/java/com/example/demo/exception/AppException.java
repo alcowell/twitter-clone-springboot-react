@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  */
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-public class AppExeption extends RuntimeException {
+public class AppException extends RuntimeException {
 
 	/**
 	 * Constructs an <code>AppExeption</code> object.
 	 * @param message
 	 */
-	public AppExeption(String message) {
+	public AppException(String message) {
 		super(message);
 	}
 
@@ -23,7 +23,7 @@ public class AppExeption extends RuntimeException {
 	 * @param message
 	 * @param cause
 	 */
-	public AppExeption(String message, Throwable cause) {
+	public AppException(String message, Throwable cause) {
 		super(message, cause);
 	}
 

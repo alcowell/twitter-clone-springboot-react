@@ -17,7 +17,7 @@ import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 
 /**
- * This class generate and verifying JWT after a user logs in successfully.
+ * This class generate and verifying Jwt token after a user logs in successfully.
  * And validated Jwt token sent in the Authorization header of the requests.
  *
  * @author yosuk

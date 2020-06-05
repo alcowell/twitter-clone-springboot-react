@@ -14,7 +14,7 @@ public class JwtAuthenticationResponse {
 	 * Constructs an <code>JwtAuthenticationResponse</code> object.
 	 * @param accessToken
 	 */
-	public JwtAuthenticationResponse(String accessToken, String tokenType) {
+	public JwtAuthenticationResponse(String accessToken) {
 		this.accessToken = accessToken;
 	}
 
