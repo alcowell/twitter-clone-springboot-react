@@ -40,7 +40,7 @@ public class JwtTokenProvider {
 	/**
 	 * Time until Jwt token becomes invalid.
 	 */
-	@Value("${app.jwtExprationInMs")
+	@Value("${app.jwtExpirationInMs}")
 	private int jwtExpirationInMs;
 
 	/**
