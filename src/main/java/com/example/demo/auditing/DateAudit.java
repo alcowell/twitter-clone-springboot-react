@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 		value = {"createdAt", "updateAt"},
 		allowGetters = true
 	)
-public class DateAuditing implements Serializable {
+public class DateAudit implements Serializable {
 
 	@CreatedDate
 	@Column(nullable = false, updatable = false)

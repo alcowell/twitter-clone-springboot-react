@@ -51,7 +51,7 @@ public class JwtTokenProvider {
 	 * @return JwtsToken Jwt token consists of three elements: headers, body and signature.
 	 */
 	public String generateToken(Authentication authentication) {
-		//
+	
 		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
 		//Setting expiry date of valid Jwt token

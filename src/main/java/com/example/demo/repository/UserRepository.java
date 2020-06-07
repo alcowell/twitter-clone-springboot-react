@@ -9,19 +9,14 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.entity.User;
 
 /**
- * This interface extends <tt>JpaRepository</tt>.
  * This interface persist <tt>User</tt> domains to the database and retrieve them.
+ * This interface extends <tt>JpaRepository</tt>.
  *
  * @author yosuk
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	/**
-	 *
-	 * @param 	userId
-	 * @return 	User 	The domain
-	 */
 	Optional<User> findByUserId(String userId);
 
 	Optional<User> findByUsernameOrUserId(String username, String userId);
