@@ -19,6 +19,7 @@ import com.example.demo.entity.Tweet;
 import com.example.demo.entity.User;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.payload.PagedResponse;
+import com.example.demo.payload.TweetRequest;
 import com.example.demo.payload.TweetResponse;
 import com.example.demo.repository.TweetsRepository;
 import com.example.demo.repository.UserRepository;
@@ -65,6 +66,12 @@ public class TweetService {
 
 		return new PagedResponse<>(tweetReponses, tweets.getNumber(),
 				tweets.getSize(), tweets.getTotalElements(), tweets.getTotalPages(), tweets.isLast());
+	}
+
+	public Tweet createTweet(TweetRequest tweetRequest) {
+		Tweet tweet = new Tweet();
+		tweet.setText(tweetRequest.getText());
+		return tweetsRepository.save(tweet);
 	}
 
 	private void validatePageNumberAndSize(int page, int size) {
