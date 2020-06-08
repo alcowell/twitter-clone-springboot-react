@@ -13,4 +13,21 @@ public class TweetRequest {
 	@Size(min = 1, max = 140)
 	private String text;
 
+	/**
+	 * Gets the text
+	 * @return text
+	 */
+	public String getText() {
+		return text;
+	}
+
+	/**
+	 * Sets the text
+	 * @param text 
+	 */
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	
 }
