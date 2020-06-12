@@ -12,7 +12,7 @@ import Signup from '../user/signup/Signup';
 import Login from '../user/login/Login';
 import Profile from '../user/profile/Profile';
 import AppHeader from '../common/AppHeader';
-import NotFound from '../common/NotFound';
+// import NotFound from '../common/NotFound.js';
 import LoadingIndicator from '../common/LoadingIndicator';
 import PrivateRoute from '../common/PrivateRoute';
 
@@ -145,7 +145,7 @@ class App extends Component {
                 component={NewTweet}
                 handleLogout={this.handleLogout}
               />
-              <Route component={NotFound} />
+              {/* <Route component={NotFound} /> */}
             </Switch>
           </div>
         </Content>
