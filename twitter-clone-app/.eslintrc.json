@@ -9,7 +9,9 @@
     "globals": {
         "window": true,
         "document": true,
-        "moment": true
+        "moment": true,
+        "localStorage": true,
+        "fetch": true
     },
     "rules": {
         "react/jsx-filename-extension":[1, {"extensions":[".js",".jsx"]}],
