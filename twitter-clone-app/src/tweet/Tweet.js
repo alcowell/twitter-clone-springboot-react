@@ -2,7 +2,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './tweet.css';
+import './Tweet.css';
 import { Link } from 'react-router-dom';
 import { Avatar } from 'antd';
 
@@ -21,7 +21,7 @@ class Tweet extends Component {
               {createdBy.username[0]}
             </Avatar>
             <span className="tweet-creator-id">@{createdBy.userid}</span>
-            <span className="tweet-creator-id">{createdBy.username}</span>
+            <span className="tweet-creator-name">{createdBy.username}</span>
             <span className="tweet-creator-date">{createdAt}</span>
           </Link>
         </div>

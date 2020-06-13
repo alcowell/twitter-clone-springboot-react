@@ -102,11 +102,11 @@ class App extends Component {
     }
     return (
       <Layout className="app-container">
-        <AppHeader
+        {/* <AppHeader
           isAuthentication={isAuthentication}
           currentUser={currentUser}
           onLogout={this.handleLogout}
-        />
+        /> */}
         <Content className="app-content">
           <div className="container">
             <Switch>
@@ -129,7 +129,7 @@ class App extends Component {
                 )}
               />
               <Route path="/signup" component={Signup} />
-              <Route
+              {/* <Route
                 path="/users/:username"
                 render={(props) => (
                   <Profile
@@ -138,7 +138,7 @@ class App extends Component {
                     {...props}
                   />
                 )}
-              />
+              /> */}
               <PrivateRoute
                 authentication={isAuthentication}
                 path="/tweet/new"
