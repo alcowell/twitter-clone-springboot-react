@@ -8,14 +8,14 @@ import { getCurrentUser } from '../util/APIUtils';
 // import { ACCESS_TOKEN } from '../constants';
 
 import TweetList from '../tweet/TweetList';
-// import NewTweet from '../tweet/NewTweet';
+import NewTweet from '../tweet/NewTweet';
 // import Signup from '../user/signup/Signup';
 import Login from '../user/login/Login';
 // import Profile from '../user/profile/Profile';
 // import AppHeader from '../common/AppHeader';
 // import NotFound from '../common/NotFound.js';
 import LoadingIndicator from '../common/LoadingIndicator';
-// import PrivateRoute from '../common/PrivateRoute';
+import PrivateRoute from '../common/PrivateRoute';
 
 const { Content } = Layout;
 

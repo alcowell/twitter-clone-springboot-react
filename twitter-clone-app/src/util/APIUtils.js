@@ -40,7 +40,7 @@ export function getAllTweet(page, size) {
 
 export function login(loginRequest) {
   return request({
-    url: `${API_BASE_URL}/auth/signin`,
+    url: 'http://localhost:8080/auth/signin',
     method: 'POST',
     body: JSON.stringify(loginRequest),
   });
