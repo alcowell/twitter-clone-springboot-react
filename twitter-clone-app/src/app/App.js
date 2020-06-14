@@ -140,12 +140,12 @@ class App extends Component {
                   />
                 )}
               /> */}
-              {/* <PrivateRoute
+              <PrivateRoute
                 authentication={isAuthentication}
                 path="/tweet/new"
                 component={NewTweet}
                 handleLogout={this.handleLogout}
-              /> */}
+              />
               {/* <Route component={NotFound} /> */}
             </Switch>
           </div>
