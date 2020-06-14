@@ -4,3 +4,12 @@ import { TWEET_TEXT_MAX_LENGTH } from '../constants';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
+
+class NewTweet extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: '',
+    };
+  }
+}

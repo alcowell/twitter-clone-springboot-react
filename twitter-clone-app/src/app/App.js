@@ -4,13 +4,13 @@ import React, { Component } from 'react';
 import { Route, withRouter, Switch } from 'react-router-dom';
 import './App.css';
 import { Layout, notification } from 'antd';
-// import { getCurrentUser } from '../util/APIUtils';
+import { getCurrentUser } from '../util/APIUtils';
 // import { ACCESS_TOKEN } from '../constants';
 
 import TweetList from '../tweet/TweetList';
 // import NewTweet from '../tweet/NewTweet';
 // import Signup from '../user/signup/Signup';
-// import Login from '../user/login/Login';
+import Login from '../user/login/Login';
 // import Profile from '../user/profile/Profile';
 // import AppHeader from '../common/AppHeader';
 // import NotFound from '../common/NotFound.js';
@@ -27,9 +27,9 @@ class App extends Component {
       isAuthentication: false,
       isLoading: false,
     };
-    // this.handleLogout = this.handleLogout.bind(this);
-    // this.loadCurrentUser = this.loadCurrentUser.bind(this);
-    // this.handleLogin = this.handleLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
+    this.loadCurrentUser = this.loadCurrentUser.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
 
     notification.config({
       placement: 'topRight',
@@ -38,29 +38,29 @@ class App extends Component {
     });
   }
 
-  // componentDidMount() {
-  //   this.loadCurrentUser();
-  // }
+  componentDidMount() {
+    this.loadCurrentUser();
+  }
 
-  // loadCurrentUser() {
-  //   this.setState({
-  //     isLoading: true,
-  //   });
-  //   getCurrentUser()
-  //     .then((response) => {
-  //       this.setState({
-  //         currentUser: response,
-  //         isAuthentication: true,
-  //         isLoading: false,
-  //       });
-  //     })
-  //     // eslint-disable-next-line no-unused-vars
-  //     .catch((error) => {
-  //       this.setState({
-  //         isLoading: false,
-  //       });
-  //     });
-  // }
+  loadCurrentUser() {
+    this.setState({
+      isLoading: true,
+    });
+    getCurrentUser()
+      .then((response) => {
+        this.setState({
+          currentUser: response,
+          isAuthentication: true,
+          isLoading: false,
+        });
+      })
+      // eslint-disable-next-line no-unused-vars
+      .catch((error) => {
+        this.setState({
+          isLoading: false,
+        });
+      });
+  }
 
   handleLogout(
     redirectTo = '/',
@@ -123,13 +123,13 @@ class App extends Component {
                   />
                 )}
               />
-              {/* <Route
+              <Route
                 path="/login"
                 render={(props) => (
                   <Login onLogin={this.handleLogin} {...props} />
                 )}
               />
-              <Route path="/signup" component={Signup} /> */}
+              {/* <Route path="/signup" component={Signup} /> */}
               {/* <Route
                 path="/users/:username"
                 render={(props) => (

@@ -53,3 +53,14 @@ export function createTweet(tweetData) {
     body: JSON.stringify(tweetData),
   });
 }
+
+export function getCurrentUser() {
+  if (!localStorage.getItem(ACCESS_TOKEN)) {
+    return Promise.reject(new Error('No access token set.'));
+  }
+
+  return request({
+    url: `http://localhost:8080/user/me`,
+    method: 'GET',
+  });
+}
