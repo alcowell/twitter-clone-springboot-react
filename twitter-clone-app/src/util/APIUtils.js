@@ -26,12 +26,14 @@ const request = (options) => {
   );
 };
 
+// eslint-disable-next-line no-unused-vars
 export function getAllTweet(page, size) {
   page = page || 0;
   size = size || TWEET_LIST_SIZE;
 
   return request({
-    url: `${API_BASE_URL}/tweet?page=${page}&size=${size}`,
+    // url: `${API_BASE_URL}/tweets/`,
+    url: 'http://localhost:8080/api/tweets/',
     method: 'GET',
   });
 }
@@ -41,5 +43,13 @@ export function login(loginRequest) {
     url: `${API_BASE_URL}/auth/signin`,
     method: 'POST',
     body: JSON.stringify(loginRequest),
+  });
+}
+
+export function createTweet(tweetData) {
+  return request({
+    url: 'http://localhost:8080/api/tweets/',
+    method: 'POST',
+    body: JSON.stringify(tweetData),
   });
 }

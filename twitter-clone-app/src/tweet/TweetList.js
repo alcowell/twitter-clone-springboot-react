@@ -19,9 +19,13 @@ class TweetList extends Component {
     };
   }
 
+  componentDidMount() {
+    this.loadTweetList();
+  }
+
   loadTweetList(page = 0, size = TWEET_LIST_SIZE) {
     const promise = getAllTweet(page, size);
-    const { stateTweets } = this.state;
+    const { tweets } = this.state;
     if (!promise) {
       return;
     }
@@ -31,9 +35,9 @@ class TweetList extends Component {
 
     promise
       .then((response) => {
-        const tweets = stateTweets.slice();
+        const stateTweets = tweets.slice();
         this.setState({
-          tweets: tweets.concat(response.content),
+          tweets: stateTweets.concat(response.content),
           paze: response.page,
           size: response.size,
           totalElements: response.totalElements,

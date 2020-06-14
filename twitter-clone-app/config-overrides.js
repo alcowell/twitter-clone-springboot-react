@@ -8,7 +8,7 @@ module.exports = override(
   }),
   addLessLoader({
     modifyVar: {
-      '@layout-body-background': '#ffffff',
+      '@layout-body-background': '#FFFFFF',
       '@layout-header-background': '#ffffff',
       '@layout-footer-background': '#ffffff',
     },
