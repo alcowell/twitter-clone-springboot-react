@@ -83,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					.permitAll()
 				.antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkUseridAvailability")
 					.permitAll()
-				.antMatchers(HttpMethod.GET, "/api/polls/**","/api/users/**")
+				.antMatchers(HttpMethod.GET, "/api/tweets/**","/api/user/**")
 					.permitAll()
 				.anyRequest()
 					.authenticated();
