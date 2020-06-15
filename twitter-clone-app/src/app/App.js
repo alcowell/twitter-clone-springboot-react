@@ -12,7 +12,7 @@ import NewTweet from '../tweet/NewTweet';
 // import Signup from '../user/signup/Signup';
 import Login from '../user/login/Login';
 // import Profile from '../user/profile/Profile';
-// import AppHeader from '../common/AppHeader';
+import AppHeader from '../common/AppHeader';
 // import NotFound from '../common/NotFound.js';
 import LoadingIndicator from '../common/LoadingIndicator';
 import PrivateRoute from '../common/PrivateRoute';
@@ -103,11 +103,11 @@ class App extends Component {
     }
     return (
       <Layout className="app-container">
-        {/* <AppHeader
+        <AppHeader
           isAuthentication={isAuthentication}
           currentUser={currentUser}
           onLogout={this.handleLogout}
-        /> */}
+        />
         <Content className="app-content">
           <div className="container">
             <Switch>
@@ -141,7 +141,7 @@ class App extends Component {
                 )}
               /> */}
               <PrivateRoute
-                authentication={isAuthentication}
+                authenticated={isAuthentication}
                 path="/tweet/new"
                 component={NewTweet}
                 handleLogout={this.handleLogout}

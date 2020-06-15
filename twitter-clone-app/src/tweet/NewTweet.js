@@ -11,8 +11,13 @@ class NewTweet extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: '',
+      tweet: {
+        text: '',
+      },
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.isFormInvalid = this.isFormInvalid.bind(this);
+    this.handleTextChange = this.handleTextChange.bind(this);
   }
 
   validateText = (text) => {
@@ -35,18 +40,18 @@ class NewTweet extends Component {
   };
 
   handleTextChange(event) {
-    const { value } = event.target;
+    const text = event.target.value;
     this.setState({
-      text: {
-        value,
-        ...this.validateText(value),
+      tweet: {
+        text,
+        ...this.validateText(text),
       },
     });
   }
 
   isFormInvalid() {
-    const { text } = this.state;
-    if (text.validateStatus !== 'success') {
+    const { tweet } = this.state;
+    if (tweet.validateStatus !== 'success') {
       return true;
     }
     return false;
@@ -54,10 +59,10 @@ class NewTweet extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const { text } = this.state;
+    const { tweet } = this.state;
     const { history, handleLogout } = this.props;
     const tweetData = {
-      text,
+      text: tweet.text,
     };
 
     createTweet(tweetData)
@@ -82,22 +87,22 @@ class NewTweet extends Component {
   }
 
   render() {
-    const { text } = this.state;
+    const { tweet } = this.state;
     return (
       <div className="new-tweet-container">
         <h1>Create Tweet</h1>
         <div className="new-tweet-content">
           <Form onSubmit={this.handleSubmit} className="create-tweet-form">
             <FormItem
-              validateStatus={text.validateStatus}
-              help={text.errorMsg}
+              validateStatus={tweet.validateStatus}
+              help={tweet.errorMsg}
               className="tweet-form-row"
             >
               <TextArea
                 placeholder="What are you doing now ?"
                 style={{ fontSize: '16px' }}
                 autosize={{ minRow: 3, maxRows: 6 }}
-                value={text.value}
+                value={tweet.text}
                 onChange={this.handleTextChange}
               />
             </FormItem>

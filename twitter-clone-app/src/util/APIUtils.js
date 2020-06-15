@@ -3,7 +3,7 @@ import { API_BASE_URL, ACCESS_TOKEN, TWEET_LIST_SIZE } from '../constants';
 const request = (options) => {
   // eslint-disable-next-line no-undef
   const headers = new Headers({
-    'Content-Type': 'application',
+    'Content-Type': 'application/json',
   });
 
   if (localStorage.getItem(ACCESS_TOKEN)) {
@@ -40,7 +40,7 @@ export function getAllTweet(page, size) {
 
 export function login(loginRequest) {
   return request({
-    url: 'http://localhost:8080/auth/signin',
+    url: 'http://localhost:8080/api/auth/signin',
     method: 'POST',
     body: JSON.stringify(loginRequest),
   });
@@ -60,7 +60,7 @@ export function getCurrentUser() {
   }
 
   return request({
-    url: `http://localhost:8080/user/me`,
+    url: `http://localhost:8080/api/user/me`,
     method: 'GET',
   });
 }
