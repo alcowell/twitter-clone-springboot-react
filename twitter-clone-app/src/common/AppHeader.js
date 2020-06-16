@@ -34,7 +34,13 @@ class AppHeader extends Component {
         </Menu.Item>,
         <Menu.Item key="/tweet/new">
           <Link to="/tweet/new">
-            <img src={tweetIcon} alt="tweet" className="tweet-icon" />
+            <img
+              src={tweetIcon}
+              alt="tweet"
+              className="tweet-icon"
+              width="32"
+              height="32"
+            />
           </Link>
         </Menu.Item>,
         <Menu.Item key="/profile" className="profile-icon">

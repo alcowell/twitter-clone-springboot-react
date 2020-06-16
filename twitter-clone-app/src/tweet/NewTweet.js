@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Form, Input, Button, notification } from 'antd';
 import { TWEET_TEXT_MAX_LENGTH } from '../constants';
 import { createTweet } from '../util/APIUtils';
+import './NewTweet.css';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;

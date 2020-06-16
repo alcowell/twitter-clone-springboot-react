@@ -5,6 +5,7 @@
 }
 
 .tweet-content {
+    position: relative;
     margin-bottom: 30px;
     padding: 20px 15px 20px 15px;
     letter-spacing: .01em;
@@ -27,6 +28,24 @@
     border-radius: 24px;    
 }
 
+.tweet-creator-info {
+    margin-left: 58px;
+    margin-bottom: 10px;
+    height: 58px;
+}
+
+.tweet-creator-info .creator-link {
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.tweet-creator-info .creator-link:hover .tweet-creator-name {
+    color: #1890ff;
+    text-decoration: underline;
+}
+
 .tweet-creator-name {
     font-size: 16px;
     font-weight: 500;
@@ -47,4 +66,9 @@
     color: #657786;
     font-size: 13px;
     margin-top: 2px;
+}
+
+.tweet-text {
+    margin-top: 5px;
+    margin-bottom: 15px;
 }
