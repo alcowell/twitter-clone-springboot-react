@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -9,18 +10,22 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.entity.Like;
 import com.example.demo.entity.Tweet;
 import com.example.demo.entity.User;
 import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.payload.PagedResponse;
 import com.example.demo.payload.TweetRequest;
 import com.example.demo.payload.TweetResponse;
+import com.example.demo.repository.LikeRepository;
 import com.example.demo.repository.TweetsRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.UserPrincipal;
@@ -40,6 +45,9 @@ public class TweetService {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private LikeRepository likeRepository;
+
 	private static final Logger logger = LoggerFactory.getLogger(TweetService.class);
 
 	public PagedResponse<TweetResponse> getAllTweets(UserPrincipal currentUser, int page, int size){
@@ -58,10 +66,13 @@ public class TweetService {
 		//Map tweets to TweetResponse.
 		List<Long> tweetIds = tweets.map(Tweet::getId).getContent();
 		Map<Long, User> creatorMap = getTweetCreatorMap(tweets.getContent());
+		Map<Long,List<Like>> tweetLikeMap = getTweetLikeMap(tweets.getContent());
 
 		List<TweetResponse> tweetReponses = tweets.map(tweet ->{
 			return ModelMapper.mapTweetToResponse(tweet,
-					creatorMap.get(tweet.getCreatedBy()));
+					creatorMap.get(tweet.getCreatedBy()),
+					tweetLikeMap.get(tweet.getId())
+					);
 			}).getContent();
 
 		return new PagedResponse<>(tweetReponses, tweets.getNumber(),
@@ -72,6 +83,24 @@ public class TweetService {
 		Tweet tweet = new Tweet();
 		tweet.setText(tweetRequest.getText());
 		return tweetsRepository.save(tweet);
+	}
+
+	public Like castLikeAndUpdateTweet(Long tweetId, UserPrincipal currentUser) {
+		Tweet tweet = tweetsRepository.findById(tweetId)
+				.orElseThrow(() -> new ResourceNotFoundException("Tweet", "tweet_id", tweetId));
+		User user = userRepository.findById(currentUser.getId())
+				.orElseThrow(() -> new ResourceNotFoundException("User", "user_id", currentUser.getId()));
+		Like like = new Like();
+		like.setTweet(tweet);
+		like.setUser(user);
+
+		try {
+			like = likeRepository.save(like);
+		}catch (DataIntegrityViolationException e) {
+			throw new BadRequestException("Sorry! You have already cast your like in this tweet");
+		}
+
+		return like;
 	}
 
 	private void validatePageNumberAndSize(int page, int size) {
@@ -104,4 +133,12 @@ public class TweetService {
 		return creatorMap;
 	}
 
+	private Map<Long,List<Like>> getTweetLikeMap(List<Tweet> tweets){
+
+		Map<Long,List<Like>> tweetLikeMap = new HashMap<Long, List<Like>>();
+		for(Tweet tweet : tweets) {
+			tweetLikeMap.put(tweet.getId(), likeRepository.findByTweetId(tweet.getId()));
+		}
+		return tweetLikeMap;
+	}
 }

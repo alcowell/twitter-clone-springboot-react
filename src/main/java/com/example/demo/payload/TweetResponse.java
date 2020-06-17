@@ -1,8 +1,7 @@
 package com.example.demo.payload;
 
 import java.time.Instant;
-
-import javax.persistence.PrePersist;
+import java.util.List;
 
 /**
  * @author yosuk
@@ -17,6 +16,10 @@ public class TweetResponse {
 	private UserSummary createdBy;
 
 	private Instant creationDateTime;
+
+	private List<UserSummary> likedUsers;
+
+	private Boolean isLikedByCurrentUser;
 
 	private Boolean isDeleted;
 
@@ -85,6 +88,38 @@ public class TweetResponse {
 	}
 
 	/**
+	 * Gets the likedUsers
+	 * @return likedUsers
+	 */
+	public List<UserSummary> getLikedUsers() {
+		return likedUsers;
+	}
+
+	/**
+	 * Sets the likedUsers
+	 * @param likedUsers
+	 */
+	public void setLikedUsers(List<UserSummary> likedUsers) {
+		this.likedUsers = likedUsers;
+	}
+
+	/**
+	 * Gets the isLikedByCurrentUser
+	 * @return isLikedByCurrentUser
+	 */
+	public Boolean getIsLikedByCurrentUser() {
+		return isLikedByCurrentUser;
+	}
+
+	/**
+	 * Sets the isLikedByCurrentUser
+	 * @param isLikedByCurrentUser
+	 */
+	public void setIsLikedByCurrentUser(Boolean isLikedByCurrentUser) {
+		this.isLikedByCurrentUser = isLikedByCurrentUser;
+	}
+
+	/**
 	 * Gets the isDeleted
 	 * @return isDeleted
 	 */
@@ -100,10 +135,5 @@ public class TweetResponse {
 		this.isDeleted = isDeleted;
 	}
 
-	@PrePersist
-	public void prePersist() {
-		if(getIsDeleted() == null) {
-			setIsDeleted(false);
-		}
-	}
+
 }

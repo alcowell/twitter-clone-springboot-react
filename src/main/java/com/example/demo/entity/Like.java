@@ -30,10 +30,11 @@ public class Like extends DateAudit {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name="tweet_id", nullable = false)
+	@JoinColumn(name = "tweet_id", nullable = false)
 	private Tweet tweet;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "user_id",nullable = false)
 	private User user;
 
 	/**

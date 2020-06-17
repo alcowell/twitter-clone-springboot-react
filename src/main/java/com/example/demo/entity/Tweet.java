@@ -1,14 +1,9 @@
 package com.example.demo.entity;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -31,8 +26,6 @@ public class Tweet extends UserDateAudit {
 	@Size(min = 1, max = 140)
 	private String text;
 
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	private List<Like> likes;
 
 	/**
 	 * Gets the id
@@ -65,24 +58,6 @@ public class Tweet extends UserDateAudit {
 	public void setText(String text) {
 		this.text = text;
 	}
-
-	/**
-	 * Gets the likes
-	 * @return likes
-	 */
-	public List<Like> getLikes() {
-		return likes;
-	}
-
-	/**
-	 * Sets the likes
-	 * @param likes
-	 */
-	public void setLikes(List<Like> likes) {
-		this.likes = likes;
-	}
-
-
 
 
 }

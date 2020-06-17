@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,5 +66,12 @@ public class TweetController {
 				.buildAndExpand(tweet.getId()).toUri();
 		return ResponseEntity.created(location)
 				.body(new ApiResponce(true, "Tweet posted successfully."));
+	}
+
+	@GetMapping("/{tweetId}/like")
+	@PreAuthorize("hasRole('USER')")
+	public TweetResponse castLike(@AuthenticationPrincipal UserPrincipal currentUser,
+			@PathVariable Long tweetId) {
+		
 	}
 }
