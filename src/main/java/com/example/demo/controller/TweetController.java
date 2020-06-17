@@ -70,8 +70,15 @@ public class TweetController {
 
 	@GetMapping("/{tweetId}/like")
 	@PreAuthorize("hasRole('USER')")
-	public TweetResponse castLike(@AuthenticationPrincipal UserPrincipal currentUser,
+	public TweetResponse castLikeAndUpdateTweet(@AuthenticationPrincipal UserPrincipal currentUser,
 			@PathVariable Long tweetId) {
-		
+		return tweetService.castLikeAndUpdateTweet(tweetId, currentUser);
+	}
+
+	@GetMapping("/{tweetId}/notlike")
+	@PreAuthorize("hasRole('USER')")
+	public TweetResponse uncastLikeAndUpdateTweet(@AuthenticationPrincipal UserPrincipal currentUser,
+			@PathVariable Long tweetId) {
+		return tweetService.uncastLikeAndUpdateTweet(tweetId, currentUser);
 	}
 }

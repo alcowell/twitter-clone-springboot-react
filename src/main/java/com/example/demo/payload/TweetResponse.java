@@ -19,8 +19,6 @@ public class TweetResponse {
 
 	private List<UserSummary> likedUsers;
 
-	private Boolean isLikedByCurrentUser;
-
 	private Boolean isDeleted;
 
 	/**
@@ -103,21 +101,6 @@ public class TweetResponse {
 		this.likedUsers = likedUsers;
 	}
 
-	/**
-	 * Gets the isLikedByCurrentUser
-	 * @return isLikedByCurrentUser
-	 */
-	public Boolean getIsLikedByCurrentUser() {
-		return isLikedByCurrentUser;
-	}
-
-	/**
-	 * Sets the isLikedByCurrentUser
-	 * @param isLikedByCurrentUser
-	 */
-	public void setIsLikedByCurrentUser(Boolean isLikedByCurrentUser) {
-		this.isLikedByCurrentUser = isLikedByCurrentUser;
-	}
 
 	/**
 	 * Gets the isDeleted

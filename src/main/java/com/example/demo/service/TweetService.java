@@ -85,7 +85,7 @@ public class TweetService {
 		return tweetsRepository.save(tweet);
 	}
 
-	public Like castLikeAndUpdateTweet(Long tweetId, UserPrincipal currentUser) {
+	public TweetResponse castLikeAndUpdateTweet(Long tweetId, UserPrincipal currentUser) {
 		Tweet tweet = tweetsRepository.findById(tweetId)
 				.orElseThrow(() -> new ResourceNotFoundException("Tweet", "tweet_id", tweetId));
 		User user = userRepository.findById(currentUser.getId())
@@ -100,7 +100,28 @@ public class TweetService {
 			throw new BadRequestException("Sorry! You have already cast your like in this tweet");
 		}
 
-		return like;
+		List<Like> likes = likeRepository.findByTweetId(tweet.getId());
+
+		return ModelMapper.mapTweetToResponse(tweet, user, likes);
+	}
+
+	public TweetResponse uncastLikeAndUpdateTweet(Long tweetId, UserPrincipal currentUser) {
+		Tweet tweet = tweetsRepository.findById(tweetId)
+				.orElseThrow(() -> new ResourceNotFoundException("Tweet", "tweet_id", tweetId));
+		User user = userRepository.findById(currentUser.getId())
+				.orElseThrow(() -> new ResourceNotFoundException("User", "user_id", currentUser.getId()));
+
+		try {
+		likeRepository.deleteByTweetIdAndUserId(tweetId, currentUser.getId());
+
+		//ToDo: Specify type of exception.
+		}catch (Exception e) {
+			throw new BadRequestException("Sorry! You have already uncast your like in this tweet");
+		}
+
+		List<Like> likes = likeRepository.findByTweetId(tweet.getId());
+
+		return ModelMapper.mapTweetToResponse(tweet, user, likes);
 	}
 
 	private void validatePageNumberAndSize(int page, int size) {
@@ -141,4 +162,5 @@ public class TweetService {
 		}
 		return tweetLikeMap;
 	}
+
 }
