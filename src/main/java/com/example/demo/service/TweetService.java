@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Like;
@@ -22,14 +17,13 @@ import com.example.demo.entity.Tweet;
 import com.example.demo.entity.User;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.payload.PagedResponse;
+import com.example.demo.payload.ListResponse;
 import com.example.demo.payload.TweetRequest;
 import com.example.demo.payload.TweetResponse;
 import com.example.demo.repository.LikeRepository;
 import com.example.demo.repository.TweetsRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.UserPrincipal;
-import com.example.demo.util.AppConstants;
 import com.example.demo.util.ModelMapper;
 
 /**
@@ -50,33 +44,31 @@ public class TweetService {
 
 	private static final Logger logger = LoggerFactory.getLogger(TweetService.class);
 
-	public PagedResponse<TweetResponse> getAllTweets(UserPrincipal currentUser, int page, int size){
+	public ListResponse<TweetResponse> getAllTweets(UserPrincipal currentUser){
 
-		validatePageNumberAndSize(page, size);
+//		validatePageNumberAndSize(page, size);
 
 		//Retrieve Tweets
-		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
-		Page<Tweet> tweets = tweetsRepository.findAll(pageable);
+//		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+		List<Tweet> tweets = tweetsRepository.findAllAndIsLiked(currentUser.getId());
 
-		if(tweets.getNumberOfElements() == 0) {
-			return new PagedResponse<>(Collections.emptyList(), tweets.getNumber(),
-					tweets.getSize(), tweets.getTotalElements(), tweets.getTotalPages(), tweets.isLast());
+		if(tweets.isEmpty()) {
+			return null;
 		}
 
 		//Map tweets to TweetResponse.
-		List<Long> tweetIds = tweets.map(Tweet::getId).getContent();
-		Map<Long, User> creatorMap = getTweetCreatorMap(tweets.getContent());
-		Map<Long,List<Like>> tweetLikeMap = getTweetLikeMap(tweets.getContent());
+		List<Long> tweetIds = tweets.stream().map(Tweet::getId).collect(Collectors.toList());
+		Map<Long, User> creatorMap = getTweetCreatorMap(tweets);
+		Map<Long,List<Like>> tweetLikeMap = getTweetLikeMap(tweets);
 
-		List<TweetResponse> tweetReponses = tweets.map(tweet ->{
+		List<TweetResponse> tweetResponses = tweets.stream().map(tweet ->{
 			return ModelMapper.mapTweetToResponse(tweet,
 					creatorMap.get(tweet.getCreatedBy()),
 					tweetLikeMap.get(tweet.getId())
 					);
-			}).getContent();
+			}).collect(Collectors.toList());
 
-		return new PagedResponse<>(tweetReponses, tweets.getNumber(),
-				tweets.getSize(), tweets.getTotalElements(), tweets.getTotalPages(), tweets.isLast());
+		return new ListResponse<TweetResponse>(tweetResponses);
 	}
 
 	public Tweet createTweet(TweetRequest tweetRequest) {
@@ -99,9 +91,8 @@ public class TweetService {
 		}catch (DataIntegrityViolationException e) {
 			throw new BadRequestException("Sorry! You have already cast your like in this tweet");
 		}
-
+		tweet.setIsLikedByCurrentUser(true);
 		List<Like> likes = likeRepository.findByTweetId(tweet.getId());
-
 		return ModelMapper.mapTweetToResponse(tweet, user, likes);
 	}
 
@@ -119,20 +110,21 @@ public class TweetService {
 			throw new BadRequestException("Sorry! You have already uncast your like in this tweet");
 		}
 
+		tweet.setIsLikedByCurrentUser(false);
 		List<Like> likes = likeRepository.findByTweetId(tweet.getId());
 
 		return ModelMapper.mapTweetToResponse(tweet, user, likes);
 	}
 
-	private void validatePageNumberAndSize(int page, int size) {
-		if(page < 0) {
-			throw new BadRequestException("Page number cannot be less than zero.");
-		}
-
-		if(size > AppConstants.MAX_PAGE_SIZE) {
-			throw new BadRequestException("Page size must not be greater than " + AppConstants.MAX_PAGE_SIZE);
-		}
-	}
+//	private void validatePageNumberAndSize(int page, int size) {
+//		if(page < 0) {
+//			throw new BadRequestException("Page number cannot be less than zero.");
+//		}
+//
+//		if(size > AppConstants.MAX_PAGE_SIZE) {
+//			throw new BadRequestException("Page size must not be greater than " + AppConstants.MAX_PAGE_SIZE);
+//		}
+//	}
 
 	/**
 	 * Get Tweet Creator details of the given list of tweets.

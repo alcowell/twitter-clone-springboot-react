@@ -31,6 +31,8 @@ public class ModelMapper {
 		}else {
 			tweetResponse.setLikedUsers(null);
 		}
+		tweetResponse.setIsLikedByCurrentUser(tweet.getIsLikedByCurrentUser());
+
 		//ToDo: Add delete function
 		tweetResponse.setIsDeleted(false);
 
