@@ -115,16 +115,15 @@ public class TweetService {
 			throw new BadRequestException("Sorry! You have already cast your like in this tweet");
 		}
 		tweet.setIsLikedByCurrentUser(true);
+		User likedUser = userRepository.findById(tweet.getCreatedBy())
+				.orElseThrow(() -> new ResourceNotFoundException("User", "user_id", tweet.getCreatedBy()));
 		List<Like> likes = likeRepository.findByTweetId(tweet.getId());
-		return ModelMapper.mapTweetToResponse(tweet, user, likes);
+		return ModelMapper.mapTweetToResponse(tweet, likedUser, likes);
 	}
 
 	public TweetResponse uncastLikeAndUpdateTweet(Long tweetId, UserPrincipal currentUser) {
 		Tweet tweet = tweetsRepository.findById(tweetId)
 				.orElseThrow(() -> new ResourceNotFoundException("Tweet", "tweet_id", tweetId));
-		User user = userRepository.findById(currentUser.getId())
-				.orElseThrow(() -> new ResourceNotFoundException("User", "user_id", currentUser.getId()));
-
 		try {
 		likeRepository.deleteByTweetIdAndUserId(tweetId, currentUser.getId());
 
@@ -132,6 +131,8 @@ public class TweetService {
 		}catch (Exception e) {
 			throw new BadRequestException("Sorry! You have already uncast your like in this tweet");
 		}
+		User user = userRepository.findById(tweet.getCreatedBy())
+				.orElseThrow(() -> new ResourceNotFoundException("User", "user_id", tweet.getCreatedBy()));
 
 		tweet.setIsLikedByCurrentUser(false);
 		List<Like> likes = likeRepository.findByTweetId(tweet.getId());
