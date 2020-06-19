@@ -1,8 +1,9 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { notification } from 'antd';
 import Tweet from './Tweet';
-import { getAllTweet } from '../util/APIUtils';
+import { getAllTweet, castLike, uncastLike } from '../util/APIUtils';
 import LoadingIndicator from '../common/LoadingIndicator';
 import { TWEET_LIST_SIZE } from '../constants';
 
@@ -11,20 +12,38 @@ class TweetList extends Component {
     super(props);
     this.state = {
       tweets: [],
-      paze: 0,
-      size: 10,
-      totalElements: 0,
-      last: true,
       isLoading: false,
     };
+    this.loadTweetList = this.loadTweetList.bind(this);
   }
 
   componentDidMount() {
     this.loadTweetList();
   }
 
-  loadTweetList(page = 0, size = TWEET_LIST_SIZE) {
-    const promise = getAllTweet(page, size);
+  // componentDidUpdate(nextProps) {
+  //   const { isAuthenticated } = this.props;
+  //   if (isAuthenticated !== nextProps.isAuthenticated) {
+  //     // Reset State
+  //     this.setState({
+  //       tweets: [],
+  //       isLoading: false,
+  //     });
+  //     this.loadTweetList();
+  //   }
+  // }
+
+  loadTweetList(type,) {
+    switch(type){
+      case 'ALL':
+        const promise = getAllTweet();
+        break
+      
+      case 'SELF':
+        const promise = 
+    }
+
+    const promise = getAllTweet();
     const { tweets } = this.state;
     if (!promise) {
       return;
@@ -37,11 +56,7 @@ class TweetList extends Component {
       .then((response) => {
         const stateTweets = tweets.slice();
         this.setState({
-          tweets: stateTweets.concat(response.content),
-          paze: response.page,
-          size: response.size,
-          totalElements: response.totalElements,
-          last: response.last,
+          tweets: stateTweets.concat(response.contents),
           isLoading: false,
         });
       })
@@ -53,13 +68,79 @@ class TweetList extends Component {
       });
   }
 
+  handleLikeSubmit(event, tweetIndex) {
+    event.preventDefault();
+    const { isAuthenticated, history } = this.props;
+    const { tweets } = this.state;
+    const tweet = tweets[tweetIndex];
+
+    if (!isAuthenticated) {
+      history.push('/login');
+      notification.info({
+        message: 'Tweet App clone',
+        description: 'Please login to like',
+      });
+      return;
+    }
+    castLike(tweet.id)
+      .then((response) => {
+        const tweetsSlice = tweets.slice();
+        tweetsSlice[tweetIndex] = response;
+        this.setState({
+          tweets: tweetsSlice,
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: 'Tweet App clone',
+          description: 'Sorry! Something went wrong. Please try again!',
+        });
+      });
+  }
+
+  handleLikeDetach(event, tweetIndex) {
+    event.preventDefault();
+    const { isAuthenticated, history } = this.props;
+    const { tweets } = this.state;
+    const tweet = tweets[tweetIndex];
+
+    uncastLike(tweet.id)
+      .then((response) => {
+        const tweetsSlice = tweets.slice();
+        tweetsSlice[tweetIndex] = response;
+        this.setState({
+          tweets: tweetsSlice,
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message: 'Tweet App clone',
+          description: 'Sorry! Something went wrong. Please try again!',
+        });
+      });
+  }
+
   render() {
     const tweetView = [];
+    const { isAuthenticated, history } = this.props;
     const { tweets, isLoading } = this.state;
-    tweets.map((tweet) => {
-      tweetView.push(<Tweet key={tweet.id} tweet={tweet} />);
-      return null;
-    });
+    if (tweets.length !== 0) {
+      tweets.forEach((tweet, tweetIndex) => {
+        tweetView.push(
+          <Tweet
+            key={tweet.id}
+            tweet={tweet}
+            handleLikeSubmit={(event) =>
+              this.handleLikeSubmit(event, tweetIndex)
+            }
+            handleLikeDetach={(event) =>
+              this.handleLikeDetach(event, tweetIndex)
+            }
+          />
+        );
+      });
+    }
+
     return (
       <div className="tweet-container">
         {tweetView}

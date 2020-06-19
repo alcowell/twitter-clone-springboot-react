@@ -11,7 +11,7 @@ import TweetList from '../tweet/TweetList';
 import NewTweet from '../tweet/NewTweet';
 // import Signup from '../user/signup/Signup';
 import Login from '../user/login/Login';
-// import Profile from '../user/profile/Profile';
+import Profile from '../user/profile/Profile';
 import AppHeader from '../common/AppHeader';
 // import NotFound from '../common/NotFound.js';
 import LoadingIndicator from '../common/LoadingIndicator';
@@ -24,8 +24,9 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: null,
-      isAuthentication: false,
+      isAuthenticated: false,
       isLoading: false,
+      totalElements: null,
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -50,8 +51,9 @@ class App extends Component {
       .then((response) => {
         this.setState({
           currentUser: response,
-          isAuthentication: true,
+          isAuthenticated: true,
           isLoading: false,
+          totalElements: 'fuck',
         });
       })
       // eslint-disable-next-line no-unused-vars
@@ -69,7 +71,7 @@ class App extends Component {
   ) {
     this.setState({
       currentUser: null,
-      isAuthentication: false,
+      isAuthenticated: false,
     });
     const { history } = this.props;
     history.push(redirectTo);
@@ -96,58 +98,55 @@ class App extends Component {
   }
 
   render() {
-    const { isLoading, isAuthentication, currentUser } = this.state;
-
+    const { isLoading, isAuthenticated, currentUser } = this.state;
     if (isLoading) {
       return <LoadingIndicator />;
     }
+
     return (
       <Layout className="app-container">
         <AppHeader
-          isAuthentication={isAuthentication}
+          isAuthenticated={isAuthenticated}
           currentUser={currentUser}
           onLogout={this.handleLogout}
         />
         <Content className="app-content">
           <div className="container">
-            <Switch>
-              <Route
-                exact
-                path="/"
-                render={(props) => (
-                  <TweetList
-                    isAuthentication={isAuthentication}
-                    currentUser={currentUser}
-                    onLogout={this.handleLogout}
-                    {...props}
-                  />
-                )}
-              />
-              <Route
-                path="/login"
-                render={(props) => (
-                  <Login onLogin={this.handleLogin} {...props} />
-                )}
-              />
-              {/* <Route path="/signup" component={Signup} /> */}
-              {/* <Route
-                path="/users/:username"
-                render={(props) => (
-                  <Profile
-                    isAuthentication={isAuthentication}
-                    currentUser={currentUser}
-                    {...props}
-                  />
-                )}
-              /> */}
-              <PrivateRoute
-                authenticated={isAuthentication}
-                path="/tweet/new"
-                component={NewTweet}
-                handleLogout={this.handleLogout}
-              />
-              {/* <Route component={NotFound} /> */}
-            </Switch>
+            {/* <Switch> */}
+            <PrivateRoute
+              exact
+              path="/"
+              authenticated={isAuthenticated}
+              component={TweetList}
+              isAuthenticated={isAuthenticated}
+              currentUser={currentUser}
+              onLogout={this.handleLogout}
+            />
+            <Route
+              path="/login"
+              render={(props) => (
+                <Login onLogin={this.handleLogin} {...props} />
+              )}
+            />
+            {/* <Route path="/signup" component={Signup} /> */}
+            <Route
+              path="/users/:username"
+              render={(props) => (
+                <Profile
+                  isAuthenticated={isAuthenticated}
+                  currentUser={currentUser}
+                  {...props}
+                />
+              )}
+            />
+            <PrivateRoute
+              authenticated={isAuthenticated}
+              path="/tweet/new"
+              component={NewTweet}
+              handleLogout={this.handleLogout}
+            />
+            {/* <Route component={NotFound} /> */}
+            {/* </Switch> */}
           </div>
         </Content>
       </Layout>

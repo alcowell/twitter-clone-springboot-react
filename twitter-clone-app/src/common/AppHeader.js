@@ -91,12 +91,12 @@ function ProfileDropdownMenu(props) {
   const dropdownMenu = (
     <Menu onClick={handleMenuClick} className="profile-dropdown-menu">
       <Menu.Item key="user-info" className="dropdown-item" disabled>
-        <div className="userid-info">{currentUser.userid}</div>
-        <div className="username-info">{currentUser.name}</div>
+        <div className="userid-info">{currentUser.userId}</div>
+        <div className="username-info">{currentUser.username}</div>
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="profile" className="dropdown-item">
-        <Link to={`/user/${currentUser.userid}`}>Profile</Link>
+        <Link to={`/user/${currentUser.userId}`}>Profile</Link>
       </Menu.Item>
       <Menu.Item key="logout" className="dropdown-item">
         Logout

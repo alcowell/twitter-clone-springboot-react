@@ -27,20 +27,23 @@ const request = (options) => {
 };
 
 // eslint-disable-next-line no-unused-vars
-export function getAllTweet(page, size) {
-  page = page || 0;
-  size = size || TWEET_LIST_SIZE;
-
+export function getAllTweet() {
   return request({
-    // url: `${API_BASE_URL}/tweets/`,
-    url: 'http://localhost:8080/api/tweets/',
+    url: `${API_BASE_URL}/tweets`,
+    method: 'GET',
+  });
+}
+
+export function getTweetByUser(userId) {
+  return request({
+    url: `${API_BASE_URL}/tweets/${userId}`,
     method: 'GET',
   });
 }
 
 export function login(loginRequest) {
   return request({
-    url: 'http://localhost:8080/api/auth/signin',
+    url: `${API_BASE_URL}/auth/signin`,
     method: 'POST',
     body: JSON.stringify(loginRequest),
   });
@@ -48,7 +51,7 @@ export function login(loginRequest) {
 
 export function createTweet(tweetData) {
   return request({
-    url: 'http://localhost:8080/api/tweets/',
+    url: `${API_BASE_URL}/tweets`,
     method: 'POST',
     body: JSON.stringify(tweetData),
   });
@@ -60,7 +63,27 @@ export function getCurrentUser() {
   }
 
   return request({
-    url: `http://localhost:8080/api/user/me`,
+    url: `${API_BASE_URL}/user/me`,
+    method: 'GET',
+  });
+}
+
+export function castLike(tweetId) {
+  if (!localStorage.getItem(ACCESS_TOKEN)) {
+    return Promise.reject(new Error('No access token set.'));
+  }
+  return request({
+    url: `${API_BASE_URL}/tweets/${tweetId}/like`,
+    method: 'GET',
+  });
+}
+
+export function uncastLike(tweetId) {
+  if (!localStorage.getItem(ACCESS_TOKEN)) {
+    return Promise.reject(new Error('No access token set.'));
+  }
+  return request({
+    url: `${API_BASE_URL}/tweets/${tweetId}/notlike`,
     method: 'GET',
   });
 }

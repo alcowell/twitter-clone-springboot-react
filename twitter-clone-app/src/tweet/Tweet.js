@@ -5,22 +5,22 @@ import PropTypes from 'prop-types';
 import './Tweet.css';
 import { Link } from 'react-router-dom';
 import { Avatar } from 'antd';
+import { HeartFilled } from '@ant-design/icons';
 
 class Tweet extends Component {
-  constructor(props) {
-    super(props);
-    this.Like = this.Like.bind(this);
-  }
-
-  Like() {}
-
   render() {
-    const { tweet } = this.props;
-    const { createdBy, text, creationDateTime, isLiked } = tweet;
+    const { tweet, handleLikeSubmit, handleLikeDetach } = this.props;
+    const {
+      createdBy,
+      text,
+      creationDateTime,
+      likedUsers,
+      isLikedByCurrentUser,
+    } = tweet;
     return (
       <div className="tweet-content">
         <div className="creator-info">
-          <Link className="creator-link" to={`/user/${createdBy.userid}`}>
+          <Link className="creator-link" to={`/user/${createdBy.userId}`}>
             <Avatar
               className="tweet-creator-avatar"
               style={{ backgroundColor: '#F44336' }}
@@ -34,21 +34,42 @@ class Tweet extends Component {
         </div>
         <div className="tweet-text">{text}</div>
         <hr width="80%" />
-        <div className="tweet-footer" />
+        <div className="tweet-footer">
+          <span>
+            <HeartFilled
+              className={[
+                'like',
+                isLikedByCurrentUser ? 'after' : 'before',
+              ].join('-')}
+              onClick={
+                isLikedByCurrentUser ? handleLikeDetach : handleLikeSubmit
+              }
+            />
+          </span>
+          <span>{likedUsers !== null ? likedUsers.length : null}</span>
+        </div>
       </div>
     );
   }
 }
 
-Tweet.propTyps = {
+Tweet.propTypes = {
   tweet: PropTypes.shape({
     createdBy: PropTypes.shape({
       id: PropTypes.number,
       username: PropTypes.string,
-      userid: PropTypes.string,
+      userId: PropTypes.string,
     }),
+    likedUsers: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        username: PropTypes.string,
+        userId: PropTypes.string,
+      })
+    ),
     text: PropTypes.string,
     createdAt: PropTypes.string,
+    isLikedByCurrentUser: PropTypes.bool,
   }),
 };
 export default Tweet;
