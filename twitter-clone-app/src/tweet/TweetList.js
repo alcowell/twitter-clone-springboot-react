@@ -1,9 +1,15 @@
+/* eslint-disable default-case */
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { notification } from 'antd';
 import Tweet from './Tweet';
-import { getAllTweet, castLike, uncastLike } from '../util/APIUtils';
+import {
+  getAllTweet,
+  castLike,
+  uncastLike,
+  getTweetByUserid,
+} from '../util/APIUtils';
 import LoadingIndicator from '../common/LoadingIndicator';
 import { TWEET_LIST_SIZE } from '../constants';
 
@@ -18,7 +24,8 @@ class TweetList extends Component {
   }
 
   componentDidMount() {
-    this.loadTweetList();
+    const { type, id } = this.props;
+    this.loadTweetList(type, id);
   }
 
   // componentDidUpdate(nextProps) {
@@ -33,17 +40,16 @@ class TweetList extends Component {
   //   }
   // }
 
-  loadTweetList(type,) {
-    switch(type){
+  loadTweetList(type, id) {
+    let promise = null;
+    switch (type) {
       case 'ALL':
-        const promise = getAllTweet();
-        break
-      
-      case 'SELF':
-        const promise = 
+        promise = getAllTweet();
+        break;
+      case 'SPECIFIC':
+        promise = getTweetByUserid(id);
+        break;
     }
-
-    const promise = getAllTweet();
     const { tweets } = this.state;
     if (!promise) {
       return;

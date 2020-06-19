@@ -6,6 +6,7 @@ import './Tweet.css';
 import { Link } from 'react-router-dom';
 import { Avatar } from 'antd';
 import { HeartFilled } from '@ant-design/icons';
+import getAvatarColor from '../util/Colors';
 
 class Tweet extends Component {
   render() {
@@ -20,10 +21,10 @@ class Tweet extends Component {
     return (
       <div className="tweet-content">
         <div className="creator-info">
-          <Link className="creator-link" to={`/user/${createdBy.userId}`}>
+          <Link className="creator-link" to={`/users/${createdBy.id}`}>
             <Avatar
               className="tweet-creator-avatar"
-              style={{ backgroundColor: '#F44336' }}
+              style={{ backgroundColor: getAvatarColor(createdBy.username) }}
             >
               {createdBy.username[0]}
             </Avatar>

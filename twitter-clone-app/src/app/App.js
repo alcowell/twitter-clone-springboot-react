@@ -26,7 +26,6 @@ class App extends Component {
       currentUser: null,
       isAuthenticated: false,
       isLoading: false,
-      totalElements: null,
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -53,7 +52,6 @@ class App extends Component {
           currentUser: response,
           isAuthenticated: true,
           isLoading: false,
-          totalElements: 'fuck',
         });
       })
       // eslint-disable-next-line no-unused-vars
@@ -112,41 +110,43 @@ class App extends Component {
         />
         <Content className="app-content">
           <div className="container">
-            {/* <Switch> */}
-            <PrivateRoute
-              exact
-              path="/"
-              authenticated={isAuthenticated}
-              component={TweetList}
-              isAuthenticated={isAuthenticated}
-              currentUser={currentUser}
-              onLogout={this.handleLogout}
-            />
-            <Route
-              path="/login"
-              render={(props) => (
-                <Login onLogin={this.handleLogin} {...props} />
-              )}
-            />
-            {/* <Route path="/signup" component={Signup} /> */}
-            <Route
-              path="/users/:username"
-              render={(props) => (
-                <Profile
-                  isAuthenticated={isAuthenticated}
-                  currentUser={currentUser}
-                  {...props}
-                />
-              )}
-            />
-            <PrivateRoute
-              authenticated={isAuthenticated}
-              path="/tweet/new"
-              component={NewTweet}
-              handleLogout={this.handleLogout}
-            />
-            {/* <Route component={NotFound} /> */}
-            {/* </Switch> */}
+            <Switch>
+              <PrivateRoute
+                exact
+                path="/"
+                authenticated={isAuthenticated}
+                component={TweetList}
+                isAuthenticated={isAuthenticated}
+                currentUser={currentUser}
+                type="ALL"
+                id={null}
+                onLogout={this.handleLogout}
+              />
+              <Route
+                path="/login"
+                render={(props) => (
+                  <Login onLogin={this.handleLogin} {...props} />
+                )}
+              />
+              {/* <Route path="/signup" component={Signup} /> */}
+              <Route
+                path="/users/:id"
+                render={(props) => (
+                  <Profile
+                    isAuthenticated={isAuthenticated}
+                    currentUser={currentUser}
+                    {...props}
+                  />
+                )}
+              />
+              <PrivateRoute
+                authenticated={isAuthenticated}
+                path="/tweet/new"
+                component={NewTweet}
+                handleLogout={this.handleLogout}
+              />
+              {/* <Route component={NotFound} /> */}
+            </Switch>
           </div>
         </Content>
       </Layout>

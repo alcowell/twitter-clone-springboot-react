@@ -34,9 +34,9 @@ export function getAllTweet() {
   });
 }
 
-export function getTweetByUser(userId) {
+export function getTweetByUserid(id) {
   return request({
-    url: `${API_BASE_URL}/tweets/${userId}`,
+    url: `${API_BASE_URL}/tweets/${id}`,
     method: 'GET',
   });
 }
