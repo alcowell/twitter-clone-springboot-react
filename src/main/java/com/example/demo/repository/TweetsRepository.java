@@ -3,8 +3,6 @@ package com.example.demo.repository;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,7 +21,15 @@ public interface TweetsRepository extends JpaRepository<Tweet, Long> {
 
 	Optional<Tweet> findById(Long tweetId);
 
-	Page<Tweet> findByCreatedBy(Long userId, Pageable pageble);
+	@Query(value = "select t.id,t.created_at,t.update_at,t.created_by, "
+			+ "t.update_by,t.text, "
+			+ "(case when (likes.tweet_id is null) then false "
+			+ "else true end) as is_liked_by_current_user from tweets t "
+			+ "left join likes on t.id = likes.tweet_id "
+			+ "and likes.user_id = :currentUserId "
+			+ "where t.created_by = :userId "
+			+ "order by created_at desc",nativeQuery = true)
+	List<Tweet> findTweetByUserIdAndIsLiked(@Param("currentUserId")Long currentUserId, @Param("userId") Long userId);
 
 	long countByCreatedBy(Long userId);
 

@@ -48,9 +48,15 @@ public class TweetController {
 	private static final Logger logger = LoggerFactory.getLogger(TweetController.class);
 
 	@GetMapping
-	public ListResponse<TweetResponse> getTweets(@AuthenticationPrincipal UserPrincipal currentUser){
+	public ListResponse<TweetResponse> getAllTweet(@AuthenticationPrincipal UserPrincipal currentUser){
 
 		return tweetService.getAllTweets(currentUser);
+	}
+
+	@GetMapping("/{userId}")
+	public ListResponse<TweetResponse> getTweetByUserId(@AuthenticationPrincipal UserPrincipal currentUser,
+			@PathVariable Long userId){
+		return tweetService.getTweetByUserId(currentUser,userId);
 	}
 
 	@PostMapping

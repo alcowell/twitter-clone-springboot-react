@@ -71,6 +71,29 @@ public class TweetService {
 		return new ListResponse<TweetResponse>(tweetResponses);
 	}
 
+	public ListResponse<TweetResponse> getTweetByUserId(UserPrincipal currentUser, Long userId){
+		List<Tweet> tweets = tweetsRepository.findTweetByUserIdAndIsLiked(currentUser.getId(), userId);
+
+		if(tweets.isEmpty()) {
+			return null;
+		}
+
+		//Map tweets to TweetResponse.
+		List<Long> tweetIds = tweets.stream().map(Tweet::getId).collect(Collectors.toList());
+		User createdUser = userRepository.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "user_id", userId));
+		Map<Long,List<Like>> tweetLikeMap = getTweetLikeMap(tweets);
+
+		List<TweetResponse> tweetResponses = tweets.stream().map(tweet ->{
+			return ModelMapper.mapTweetToResponse(tweet,
+					createdUser,
+					tweetLikeMap.get(tweet.getId())
+					);
+			}).collect(Collectors.toList());
+
+		return new ListResponse<TweetResponse>(tweetResponses);
+	}
+
 	public Tweet createTweet(TweetRequest tweetRequest) {
 		Tweet tweet = new Tweet();
 		tweet.setText(tweetRequest.getText());
