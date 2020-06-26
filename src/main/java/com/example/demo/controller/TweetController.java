@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -13,15 +14,15 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.demo.entity.Tweet;
 import com.example.demo.payload.ApiResponce;
 import com.example.demo.payload.ListResponse;
-import com.example.demo.payload.TweetRequest;
 import com.example.demo.payload.TweetResponse;
 import com.example.demo.repository.TweetsRepository;
 import com.example.demo.repository.UserRepository;
@@ -48,8 +49,7 @@ public class TweetController {
 	private static final Logger logger = LoggerFactory.getLogger(TweetController.class);
 
 	@GetMapping
-	public ListResponse<TweetResponse> getAllTweet(@AuthenticationPrincipal UserPrincipal currentUser){
-
+	public List<TweetResponse> getAllTweet(@AuthenticationPrincipal UserPrincipal currentUser){
 		return tweetService.getAllTweets(currentUser);
 	}
 
@@ -61,8 +61,16 @@ public class TweetController {
 
 	@PostMapping
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<?> createTweet(@Valid @RequestBody TweetRequest tweetRequest){
-		Tweet tweet = tweetService.createTweet(tweetRequest);
+	public ResponseEntity<?> createTweet(@Valid @RequestParam(name = "text") String text,
+			@RequestParam(name = "file", required = false) MultipartFile file){
+
+		Tweet tweet;
+		if(file != null) {
+			tweet = tweetService.createTweet(text, file);
+		}else {
+			tweet = tweetService.createTweet(text);
+		}
+
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest().path("/{tweetId}")
 				.buildAndExpand(tweet.getId()).toUri();
